@@ -13,37 +13,42 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="logo-img-wrap">
+      <a href="index.html" class="logo-img-wrap" aria-label="Fakhri Hardware Home">
         <img src="images/logo.jpg" alt="Fakhri Hardware & Plywood" class="nav-logo" />
       </a>
-      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
       <nav class="nav-links" id="navLinks">
-        <a href="index.html">Home</a>
-        <a href="catalogue.html" class="active">Catalogue</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="catalogue.html" class="active"><i class="fas fa-th-large"></i> Catalogue</a>
+        <a href="about.html"><i class="fas fa-store"></i> About Us</a>
+        <a href="contact.html"><i class="fas fa-address-book"></i> Contact</a>
       </nav>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
     <div class="container">
       <h1>Our <span class="accent">Catalogue</span></h1>
-      <p>Browse our full range of plywood, laminates & furniture fittings — call or WhatsApp for pricing & orders</p>
+      <p>Browse our full range of plywood, laminates & furniture fittings — call or WhatsApp for quick pricing & bulk orders</p>
     </div>
   </div>
 
   <!-- FILTER BAR -->
   <div class="filter-bar">
     <div class="container filter-inner">
-      <button class="filter-btn active" data-cat="all">All Products</button>
-      <button class="filter-btn" data-cat="plywood">🪵 Plywood</button>
-      <button class="filter-btn" data-cat="laminates">🎨 Laminates</button>
-      <button class="filter-btn" data-cat="fittings">🔩 Fittings</button>
+      <div class="filter-chips">
+        <button class="filter-btn active" data-cat="all">All Products</button>
+        <button class="filter-btn" data-cat="plywood">🪵 Plywood</button>
+        <button class="filter-btn" data-cat="laminates">🎨 Laminates</button>
+        <button class="filter-btn" data-cat="fittings">🔩 Fittings</button>
+      </div>
       <div class="search-box">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search products..." />
+        <input type="text" id="searchInput" placeholder="Search products, sizes..." />
       </div>
     </div>
   </div>
@@ -290,6 +295,26 @@
       <p>&copy; 2024 Fakhri Hardware &amp; Plywood. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ========== MOBILE BOTTOM QUICK ACTION BAR ========== -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Quick Actions">
+    <a href="tel:9977078666" class="bottom-bar-item" aria-label="Call Store">
+      <i class="fas fa-phone-alt"></i>
+      <span>Call</span>
+    </a>
+    <a href="https://wa.me/919977078666?text=Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20products." target="_blank" class="bottom-bar-item active-wa" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+    <a href="catalogue.html" class="bottom-bar-item active" aria-label="View Catalogue">
+      <i class="fas fa-th-large"></i>
+      <span>Catalogue</span>
+    </a>
+    <a href="https://maps.google.com/?q=5Q6Q+M59,+Sanwer+Rd,+Nana+Kheda,+Shivalay+Twp,+Ujjain,+MP+456010" target="_blank" class="bottom-bar-item" aria-label="Open Directions">
+      <i class="fas fa-location-dot"></i>
+      <span>Location</span>
+    </a>
+  </nav>
 
   <script src="js/main.js"></script>
 </body>

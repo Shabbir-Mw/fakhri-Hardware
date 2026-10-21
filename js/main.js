@@ -3,30 +3,79 @@
 // Main JavaScript
 // ===========================
 
-/* --- Mobile Nav Toggle --- */
+/* --- Mobile Navigation --- */
 const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('navLinks');
+const navBackdrop = document.getElementById('navBackdrop');
+
+function toggleMobileNav(forceState) {
+  if (!navLinks) return;
+  const isOpen = typeof forceState === 'boolean' ? forceState : !navLinks.classList.contains('open');
+  navLinks.classList.toggle('open', isOpen);
+  if (navBackdrop) {
+    navBackdrop.classList.toggle('active', isOpen);
+  }
+  if (hamburger) {
+    hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    const icon = hamburger.querySelector('i');
+    if (icon) {
+      icon.className = isOpen ? 'fas fa-xmark' : 'fas fa-bars';
+    }
+  }
+}
+
 if (hamburger) {
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMobileNav();
   });
 }
 
-/* --- Close nav when a link is clicked --- */
+if (navBackdrop) {
+  navBackdrop.addEventListener('click', () => {
+    toggleMobileNav(false);
+  });
+}
+
+/* Close nav when clicking outside */
+document.addEventListener('click', (e) => {
+  if (navLinks && navLinks.classList.contains('open')) {
+    if (!navLinks.contains(e.target) && (!hamburger || !hamburger.contains(e.target))) {
+      toggleMobileNav(false);
+    }
+  }
+});
+
+/* Close on Escape key */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks && navLinks.classList.contains('open')) {
+    toggleMobileNav(false);
+  }
+});
+
+/* --- Close nav when a nav link is clicked --- */
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
-    if (navLinks) navLinks.classList.remove('open');
+    toggleMobileNav(false);
   });
 });
 
-/* --- Highlight active nav link --- */
+/* --- Highlight active nav and bottom bar links --- */
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
 document.querySelectorAll('.nav-links a').forEach(link => {
   const href = link.getAttribute('href');
   if (href === currentPage || (currentPage === '' && href === 'index.html')) {
     link.classList.add('active');
   } else {
     link.classList.remove('active');
+  }
+});
+
+document.querySelectorAll('.mobile-bottom-bar .bottom-bar-item').forEach(item => {
+  const href = item.getAttribute('href');
+  if (href && (href === currentPage || (currentPage === '' && href === 'index.html'))) {
+    item.classList.add('active');
   }
 });
 
@@ -41,13 +90,13 @@ function initCatalogue() {
 
   function filterProducts() {
     const activeFilter = document.querySelector('.filter-btn.active')?.dataset.cat || 'all';
-    const query = searchInput ? searchInput.value.toLowerCase() : '';
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
     productCards.forEach(card => {
       const cat   = card.dataset.cat || '';
       const text  = card.textContent.toLowerCase();
       const matchCat  = activeFilter === 'all' || cat === activeFilter;
-      const matchText = text.includes(query);
+      const matchText = !query || text.includes(query);
       card.style.display = (matchCat && matchText) ? '' : 'none';
     });
 
@@ -92,7 +141,7 @@ const observer = new IntersectionObserver((entries) => {
       entry.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.08 });
 
 document.querySelectorAll('.cat-card, .why-card, .product-card, .info-item').forEach(el => {
   el.classList.add('reveal');
@@ -102,7 +151,7 @@ document.querySelectorAll('.cat-card, .why-card, .product-card, .info-item').for
 /* ---- Add reveal CSS dynamically ---- */
 const style = document.createElement('style');
 style.textContent = `
-  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.45s ease, transform 0.45s ease; }
   .reveal.visible { opacity: 1; transform: none; }
 `;
 document.head.appendChild(style);

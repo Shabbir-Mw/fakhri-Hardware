@@ -13,24 +13,27 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="logo-img-wrap">
+      <a href="index.html" class="logo-img-wrap" aria-label="Fakhri Hardware Home">
         <img src="images/logo.jpg" alt="Fakhri Hardware & Plywood" class="nav-logo" />
       </a>
-      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
       <nav class="nav-links" id="navLinks">
-        <a href="index.html">Home</a>
-        <a href="catalogue.html">Catalogue</a>
-        <a href="about.html" class="active">About Us</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="catalogue.html"><i class="fas fa-th-large"></i> Catalogue</a>
+        <a href="about.html" class="active"><i class="fas fa-store"></i> About Us</a>
+        <a href="contact.html"><i class="fas fa-address-book"></i> Contact</a>
       </nav>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
     <div class="container">
       <h1>About <span class="accent">Us</span></h1>
-      <p>Learn more about Fakhri Hardware & Plywood — your trusted local hardware partner</p>
+      <p>Learn more about Fakhri Hardware & Plywood — your trusted local hardware partner in Ujjain</p>
     </div>
   </div>
 
@@ -39,11 +42,10 @@
     <div class="container">
       <div class="about-grid">
 
-        <!-- Shop Photo -->
+        <!-- Shop / Material Photo -->
         <div class="about-img">
-          <!-- Replace src with your actual shop photo path: images/shop.jpg -->
-          <img src="images/shop.jpg" alt="Fakhri Hardware & Plywood Shop"
-            onerror="this.parentElement.innerHTML='<div class=\'about-img-placeholder\' style=\'text-align:center;padding:40px\'><i class=\'fas fa-store\' style=\'font-size:60px;color:#f97316;display:block;margin-bottom:16px\'></i><p>Shop Photo Coming Soon</p></div>'" />
+          <img src="images/Warm Stacked Plywood Layers.png" alt="Fakhri Hardware & Plywood Quality Materials"
+            onerror="this.parentElement.innerHTML='<div class=\'about-img-placeholder\' style=\'text-align:center;padding:40px\'><i class=\'fas fa-store\' style=\'font-size:54px;color:#2563eb;display:block;margin-bottom:14px\'></i><p>Fakhri Hardware &amp; Plywood</p></div>'" />
         </div>
 
         <!-- About Text -->
@@ -59,7 +61,7 @@
             We believe in honest dealing, quality products, and building long-term relationships with our customers. Visit our shop and experience the difference of working with a team that truly cares about your project.
           </p>
 
-          <div class="why-grid" style="margin-top: 32px; grid-template-columns: repeat(2, 1fr);">
+          <div class="why-grid about-why-grid">
             <div class="why-card">
               <i class="fas fa-medal"></i>
               <h4>Quality First</h4>
@@ -78,7 +80,7 @@
             <div class="why-card">
               <i class="fas fa-map-marker-alt"></i>
               <h4>Conveniently Located</h4>
-              <p>Easy to reach on Sanwer Road, Ujjain</p>
+              <p>Easy to reach on Sanwer Road, Nana Kheda</p>
             </div>
           </div>
         </div>
@@ -92,7 +94,7 @@
     <div class="container cta-inner">
       <div>
         <h2>Ready to shop or have a question?</h2>
-        <p>Reach out — we're always happy to help!</p>
+        <p>Reach out — we're always happy to help with pricing and orders!</p>
       </div>
       <div class="cta-actions">
         <a href="catalogue.html" class="btn btn-primary"><i class="fas fa-th-large"></i> Browse Catalogue</a>
@@ -132,6 +134,26 @@
       <p>&copy; 2024 Fakhri Hardware &amp; Plywood. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ========== MOBILE BOTTOM QUICK ACTION BAR ========== -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Quick Actions">
+    <a href="tel:9977078666" class="bottom-bar-item" aria-label="Call Store">
+      <i class="fas fa-phone-alt"></i>
+      <span>Call</span>
+    </a>
+    <a href="https://wa.me/919977078666?text=Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20products." target="_blank" class="bottom-bar-item active-wa" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+    <a href="catalogue.html" class="bottom-bar-item" aria-label="View Catalogue">
+      <i class="fas fa-th-large"></i>
+      <span>Catalogue</span>
+    </a>
+    <a href="https://maps.google.com/?q=5Q6Q+M59,+Sanwer+Rd,+Nana+Kheda,+Shivalay+Twp,+Ujjain,+MP+456010" target="_blank" class="bottom-bar-item" aria-label="Open Directions">
+      <i class="fas fa-location-dot"></i>
+      <span>Location</span>
+    </a>
+  </nav>
 
   <script src="js/main.js"></script>
 </body>

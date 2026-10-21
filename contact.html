@@ -13,24 +13,27 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="logo-img-wrap">
+      <a href="index.html" class="logo-img-wrap" aria-label="Fakhri Hardware Home">
         <img src="images/logo.jpg" alt="Fakhri Hardware & Plywood" class="nav-logo" />
       </a>
-      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
       <nav class="nav-links" id="navLinks">
-        <a href="index.html">Home</a>
-        <a href="catalogue.html">Catalogue</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html" class="active">Contact</a>
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="catalogue.html"><i class="fas fa-th-large"></i> Catalogue</a>
+        <a href="about.html"><i class="fas fa-store"></i> About Us</a>
+        <a href="contact.html" class="active"><i class="fas fa-address-book"></i> Contact</a>
       </nav>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
     <div class="container">
       <h1>Get in <span class="accent">Touch</span></h1>
-      <p>We'd love to help — visit us, call, or drop a WhatsApp message</p>
+      <p>We'd love to help — visit us on Sanwer Road, call, or drop a WhatsApp message anytime</p>
     </div>
   </div>
 
@@ -55,8 +58,8 @@
             <div class="info-icon"><i class="fas fa-phone"></i></div>
             <div class="info-text">
               <h4>Phone Numbers</h4>
-              <p><a href="tel:9977078666">9977078666</a></p>
-              <p><a href="tel:9826988444">9826988444</a></p>
+              <p><a href="tel:9977078666"><i class="fas fa-phone-volume"></i> 9977078666</a></p>
+              <p><a href="tel:9826988444"><i class="fas fa-phone-volume"></i> 9826988444</a></p>
             </div>
           </div>
 
@@ -77,7 +80,7 @@
             </div>
           </div>
 
-          <div style="display:flex; gap:14px; margin-top: 10px; flex-wrap: wrap;">
+          <div class="contact-actions">
             <a href="tel:9977078666" class="btn btn-primary"><i class="fas fa-phone"></i> Call Now</a>
             <a href="https://wa.me/919977078666" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
           </div>
@@ -97,8 +100,8 @@
           <a
             href="https://maps.google.com/?q=5Q6Q+M59,+Sanwer+Rd,+Nana+Kheda,+Shivalay+Twp,+Ujjain,+MP+456010"
             target="_blank"
-            class="btn btn-outline"
-            style="margin-top: 16px; width: 100%; justify-content: center;">
+            class="btn btn-outline-blue"
+            style="margin-top: 14px; width: 100%; justify-content: center;">
             <i class="fas fa-directions"></i> Get Directions on Google Maps
           </a>
         </div>
@@ -138,6 +141,26 @@
       <p>&copy; 2024 Fakhri Hardware &amp; Plywood. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ========== MOBILE BOTTOM QUICK ACTION BAR ========== -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Quick Actions">
+    <a href="tel:9977078666" class="bottom-bar-item" aria-label="Call Store">
+      <i class="fas fa-phone-alt"></i>
+      <span>Call</span>
+    </a>
+    <a href="https://wa.me/919977078666?text=Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20products." target="_blank" class="bottom-bar-item active-wa" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+    <a href="catalogue.html" class="bottom-bar-item" aria-label="View Catalogue">
+      <i class="fas fa-th-large"></i>
+      <span>Catalogue</span>
+    </a>
+    <a href="https://maps.google.com/?q=5Q6Q+M59,+Sanwer+Rd,+Nana+Kheda,+Shivalay+Twp,+Ujjain,+MP+456010" target="_blank" class="bottom-bar-item active" aria-label="Open Directions">
+      <i class="fas fa-location-dot"></i>
+      <span>Location</span>
+    </a>
+  </nav>
 
   <script src="js/main.js"></script>
 </body>
