@@ -259,7 +259,7 @@ function initLightbox() {
   const titleEl = document.getElementById('lightboxTitle');
   const counterEl = document.getElementById('lightboxCounter');
 
-  const items = Array.from(document.querySelectorAll('.stack-item'));
+  const items = Array.from(document.querySelectorAll('.slide, .stack-item'));
   if (!items.length || !modal) return;
 
   let currentIndex = 0;
@@ -270,18 +270,18 @@ function initLightbox() {
 
     const currentItem = items[currentIndex];
     const img = currentItem.querySelector('img');
-    const captionSpan = currentItem.querySelector('.stack-item-caption span:first-child');
-    const badgeSpan = currentItem.querySelector('.stack-badge');
+    const captionEl = currentItem.querySelector('.slide-caption p, .stack-item-caption span:first-child');
+    const tagEl = currentItem.querySelector('.slide-tag, .stack-badge');
 
     if (!img) return;
 
     modalImg.src = img.currentSrc || img.src;
     modalImg.alt = img.alt || 'Enlarged Image';
 
-    const titleText = captionSpan ? captionSpan.textContent.trim() : (img.alt || '');
-    const badgeText = badgeSpan ? ` • ${badgeSpan.textContent.trim()}` : '';
+    const titleText = captionEl ? captionEl.textContent.trim() : (img.alt || '');
+    const tagText = tagEl ? `${tagEl.textContent.trim()} • ` : '';
 
-    if (titleEl) titleEl.textContent = titleText + badgeText;
+    if (titleEl) titleEl.textContent = tagText + titleText;
     if (counterEl) counterEl.textContent = `${currentIndex + 1} of ${items.length}`;
 
     modal.classList.add('open');
