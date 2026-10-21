@@ -134,6 +134,213 @@ function initCatalogue() {
 
 initCatalogue();
 
+/* --- About Page: Shop Photo Slider --- */
+function initAboutSlider() {
+  const slider = document.getElementById('aboutSlider');
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('sliderDots');
+  const prevBtn = document.getElementById('sliderPrev');
+  const nextBtn = document.getElementById('sliderNext');
+
+  if (!slides.length) return;
+
+  let currentIndex = 0;
+  let autoTimer = null;
+  const intervalTime = 4500; // 4.5 seconds
+
+  // Generate dynamic dots
+  if (dotsContainer) {
+    dotsContainer.innerHTML = '';
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = `slider-dot ${i === 0 ? 'active' : ''}`;
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => {
+        goToSlide(i);
+        resetAutoPlay();
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+  const dots = dotsContainer ? dotsContainer.querySelectorAll('.slider-dot') : [];
+
+  function goToSlide(index) {
+    slides[currentIndex].classList.remove('active');
+    if (dots[currentIndex]) dots[currentIndex].classList.remove('active');
+
+    currentIndex = (index + slides.length) % slides.length;
+
+    slides[currentIndex].classList.add('active');
+    if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+  }
+
+  function nextSlide() {
+    goToSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    goToSlide(currentIndex - 1);
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetAutoPlay();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetAutoPlay();
+    });
+  }
+
+  // Auto-play
+  function startAutoPlay() {
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = setInterval(nextSlide, intervalTime);
+  }
+
+  function stopAutoPlay() {
+    if (autoTimer) clearInterval(autoTimer);
+  }
+
+  function resetAutoPlay() {
+    stopAutoPlay();
+    startAutoPlay();
+  }
+
+  slider.addEventListener('mouseenter', stopAutoPlay);
+  slider.addEventListener('mouseleave', startAutoPlay);
+
+  // Mobile Touch Swipe Support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slider.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    stopAutoPlay();
+  }, { passive: true });
+
+  slider.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    startAutoPlay();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+  }
+
+  startAutoPlay();
+}
+
+initAboutSlider();
+
+/* --- Image Lightbox Popup Modal --- */
+function initLightbox() {
+  const modal = document.getElementById('lightboxModal');
+  const backdrop = document.getElementById('lightboxBackdrop');
+  const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  const modalImg = document.getElementById('lightboxImg');
+  const titleEl = document.getElementById('lightboxTitle');
+  const counterEl = document.getElementById('lightboxCounter');
+
+  const items = Array.from(document.querySelectorAll('.stack-item'));
+  if (!items.length || !modal) return;
+
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    if (index < 0 || index >= items.length) return;
+    currentIndex = index;
+
+    const currentItem = items[currentIndex];
+    const img = currentItem.querySelector('img');
+    const captionSpan = currentItem.querySelector('.stack-item-caption span:first-child');
+    const badgeSpan = currentItem.querySelector('.stack-badge');
+
+    if (!img) return;
+
+    modalImg.src = img.currentSrc || img.src;
+    modalImg.alt = img.alt || 'Enlarged Image';
+
+    const titleText = captionSpan ? captionSpan.textContent.trim() : (img.alt || '');
+    const badgeText = badgeSpan ? ` • ${badgeSpan.textContent.trim()}` : '';
+
+    if (titleEl) titleEl.textContent = titleText + badgeText;
+    if (counterEl) counterEl.textContent = `${currentIndex + 1} of ${items.length}`;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function showNext() {
+    openLightbox((currentIndex + 1) % items.length);
+  }
+
+  function showPrev() {
+    openLightbox((currentIndex - 1 + items.length) % items.length);
+  }
+
+  items.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      openLightbox(index);
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (backdrop) backdrop.addEventListener('click', closeLightbox);
+  if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+  if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
+  });
+
+  // Mobile Touch Swipe Navigation
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  modal.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  modal.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) showNext();
+      else showPrev();
+    }
+  }, { passive: true });
+}
+
+initLightbox();
+
 /* --- Scroll-reveal animation --- */
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {

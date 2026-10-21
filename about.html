@@ -42,10 +42,42 @@
     <div class="container">
       <div class="about-grid">
 
-        <!-- Shop / Material Photo -->
-        <div class="about-img">
-          <img src="images/Warm Stacked Plywood Layers.png" alt="Fakhri Hardware & Plywood Quality Materials"
-            onerror="this.parentElement.innerHTML='<div class=\'about-img-placeholder\' style=\'text-align:center;padding:40px\'><i class=\'fas fa-store\' style=\'font-size:54px;color:#2563eb;display:block;margin-bottom:14px\'></i><p>Fakhri Hardware &amp; Plywood</p></div>'" />
+        <!-- ==============================================
+             LEFT-SIDE VERTICAL PHOTO STACK
+             Stacks images vertically to cover all left space
+             alongside the text, leaving zero dead gaps.
+             To add/replace images: change src="..." or add
+             another <div class="stack-item"> block.
+             ============================================== -->
+        <div class="photo-stack-left">
+          
+          <!-- Photo 1: Showroom -->
+          <div class="stack-item">
+            <img src="images/fh6.1.jpeg" alt="Fakhri Hardware Showroom in Ujjain" />
+            <div class="stack-item-caption">
+              <span><i class="fas fa-store"></i> Main Showroom</span>
+              <span class="stack-badge">Sanwer Road</span>
+            </div>
+          </div>
+
+          <!-- Photo 2: Plywood Stock -->
+          <div class="stack-item">
+            <img src="images/Warm Stacked Plywood Layers.png" alt="Premium Plywood Stocks" />
+            <div class="stack-item-caption">
+              <span><i class="fas fa-layer-group"></i> Plywood Warehouse</span>
+              <span class="stack-badge">Commercial &amp; Marine</span>
+            </div>
+          </div>
+
+          <!-- Photo 3: Hardware & Fittings -->
+          <div class="stack-item">
+            <img src="images/fh5.jpeg" alt="Furniture Hardware & Fittings" />
+            <div class="stack-item-caption">
+              <span><i class="fas fa-screwdriver-wrench"></i> Hardware &amp; Fittings</span>
+              <span class="stack-badge">Complete Range</span>
+            </div>
+          </div>
+
         </div>
 
         <!-- About Text -->
@@ -154,6 +186,36 @@
       <span>Location</span>
     </a>
   </nav>
+
+  <!-- ========== IMAGE LIGHTBOX POPUP MODAL ========== -->
+  <div class="lightbox-modal" id="lightboxModal" aria-hidden="true" role="dialog" aria-label="Image Preview">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-container">
+      
+      <!-- Close Button -->
+      <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close image preview">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Navigation Arrows -->
+      <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next image">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+      <!-- Image & Caption Box -->
+      <div class="lightbox-content">
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" />
+        <div class="lightbox-caption">
+          <span class="lightbox-counter" id="lightboxCounter">1 of 3</span>
+          <span class="lightbox-title" id="lightboxTitle"></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
