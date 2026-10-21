@@ -1,4 +1,4 @@
-/* ============================
+﻿/* ============================
    FAKHRI HARDWARE & PLYWOOD
    Main Stylesheet
    Theme: Clean Blue & White
@@ -185,9 +185,9 @@ img { max-width: 100%; display: block; }
   min-height: 88vh;
   display: flex;
   align-items: center;
-  background: radial-gradient(circle at 85% 20%, rgba(37, 99, 235, 0.45) 0%, transparent 40%),
-              radial-gradient(circle at 10% 80%, rgba(30, 64, 175, 0.4) 0%, transparent 45%),
-              linear-gradient(135deg, #0b1942 0%, #0f2461 50%, #1e3a8a 100%);
+  justify-content: flex-start;
+  background: linear-gradient(90deg, rgba(8, 18, 48, 0.94) 0%, rgba(11, 25, 66, 0.84) 42%, rgba(15, 36, 97, 0.5) 80%, rgba(15, 36, 97, 0.35) 100%),
+              url('../images/Modern Woodworking Hardware Showroom.png') center right / cover no-repeat;
   background-color: var(--navy);
   overflow: hidden;
 }
@@ -198,19 +198,28 @@ img { max-width: 100%; display: block; }
   background-size: 24px 24px;
   pointer-events: none;
 }
-.hero-content {
+.hero .hero-content {
   position: relative;
   z-index: 1;
-  padding: 100px 0 60px;
-  max-width: 720px;
+  padding: 130px 24px 80px clamp(24px, 4vw, 56px);
+  max-width: 780px;
+  width: 100%;
+  margin: 0;
+  margin-right: auto;
+  text-align: left;
+  box-sizing: border-box;
 }
 .hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: #93c5fd;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 20px;
+  text-align: left;
 }
 .hero-content h1 {
   font-size: clamp(2.2rem, 5vw, 3.8rem);
@@ -218,13 +227,21 @@ img { max-width: 100%; display: block; }
   line-height: 1.15;
   margin-bottom: 20px;
   color: var(--white);
+  text-align: left;
 }
 .hero-sub {
   color: #bfdbfe;
   font-size: 18px;
   margin-bottom: 36px;
+  text-align: left;
 }
-.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
 
 /* ===========================
    CATEGORIES
