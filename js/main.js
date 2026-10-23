@@ -100,6 +100,26 @@ function initCatalogue() {
       card.style.display = (matchCat && matchText) ? '' : 'none';
     });
 
+    // Hide subsection if all cards inside it are hidden
+    document.querySelectorAll('.cat-subsection').forEach(subsec => {
+      const visibleSub = subsec.querySelectorAll('.product-card:not([style*="display: none"])');
+      subsec.style.display = visibleSub.length ? '' : 'none';
+
+      // Hide subsection PDF heading if all PDF cards inside are hidden
+      const pdfHeading = subsec.querySelector('.subsection-pdf-heading');
+      if (pdfHeading) {
+        const visiblePdfs = subsec.querySelectorAll('.pdf-card:not([style*="display: none"])');
+        pdfHeading.style.display = visiblePdfs.length ? '' : 'none';
+      }
+    });
+
+    // Hide subnav pills if laminates section is hidden
+    const laminatesBlock = document.getElementById('laminates');
+    const subnav = document.querySelector('.laminates-subnav');
+    if (subnav && laminatesBlock) {
+      subnav.style.display = (activeFilter === 'all' || activeFilter === 'laminates') ? '' : 'none';
+    }
+
     // Hide section title if all cards in it are hidden
     catSections.forEach(section => {
       const visible = section.querySelectorAll('.product-card:not([style*="display: none"])');
@@ -107,11 +127,69 @@ function initCatalogue() {
     });
   }
 
+  // Smoothly scroll to the start of a category section, accounting for sticky navbar + filter bar
+  function scrollToCatalogueSection(targetEl) {
+    if (!targetEl) return;
+    const nav = document.querySelector('.navbar');
+    const filterBar = document.querySelector('.filter-bar');
+    const navHeight = nav ? nav.offsetHeight : (window.innerWidth <= 768 ? 64 : 72);
+    const filterBarHeight = filterBar ? filterBar.offsetHeight : 55;
+    const totalOffset = navHeight + filterBarHeight + 14;
+
+    const elTop = targetEl.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
+    const destinationY = Math.max(0, elTop - totalOffset);
+
+    // Keep filter bar visible and prevent auto-hide during smooth scroll
+    if (window.setFilterBarProgrammaticScroll) {
+      window.setFilterBarProgrammaticScroll(true);
+    }
+    if (filterBar) {
+      filterBar.classList.remove('filter-bar-hidden');
+    }
+
+    window.scrollTo({
+      top: destinationY,
+      behavior: 'smooth'
+    });
+
+    clearTimeout(window._filterScrollTimer);
+    window._filterScrollTimer = setTimeout(() => {
+      if (window.setFilterBarProgrammaticScroll) {
+        window.setFilterBarProgrammaticScroll(false);
+      }
+    }, 700);
+  }
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       filterProducts();
+
+      // Scroll to the start of the chosen category
+      const cat = btn.dataset.cat;
+      let targetSection = null;
+      if (cat === 'all') {
+        targetSection = document.querySelector('.cat-block') || document.querySelector('.catalogue-section');
+      } else {
+        targetSection = document.getElementById(cat);
+      }
+
+      scrollToCatalogueSection(targetSection);
+    });
+  });
+
+  // Also handle click on laminates subnav pills smoothly
+  document.querySelectorAll('.laminates-subnav a').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      const hash = pill.getAttribute('href');
+      if (hash && hash.startsWith('#')) {
+        const targetEl = document.querySelector(hash);
+        if (targetEl) {
+          e.preventDefault();
+          scrollToCatalogueSection(targetEl);
+        }
+      }
     });
   });
 
@@ -127,9 +205,95 @@ function initCatalogue() {
       filterBtns.forEach(b => b.classList.remove('active'));
       target.classList.add('active');
       filterProducts();
-      document.querySelector('.filter-bar')?.scrollIntoView({ behavior: 'smooth' });
+      scrollToCatalogueSection(document.getElementById(urlParam) || document.querySelector('.filter-bar'));
     }
   }
+
+  // Initialize auto-hide on scroll down / show on scroll up
+  initFilterBarScroll();
+}
+
+/* --- Catalogue: Auto-Hide/Show Category Filter Bar on Scroll --- */
+function initFilterBarScroll() {
+  const filterBar = document.querySelector('.filter-bar');
+  if (!filterBar) return;
+
+  const nav = document.querySelector('.navbar');
+  const hero = document.querySelector('.page-hero');
+  const searchInput = document.getElementById('searchInput');
+
+  let lastScrollY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop);
+  let isTicking = false;
+  let isProgrammatic = false;
+  const SCROLL_DELTA_THRESHOLD = 3; // Detect even small upward movements (3px)
+
+  window.setFilterBarProgrammaticScroll = function(state) {
+    isProgrammatic = state;
+    if (state && filterBar) {
+      filterBar.classList.remove('filter-bar-hidden');
+    }
+    lastScrollY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop);
+  };
+
+  function updateBarState() {
+    const currentScrollY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop);
+
+    // If scrolling was triggered programmatically (e.g. clicking a filter button), keep bar visible
+    if (isProgrammatic) {
+      if (filterBar) filterBar.classList.remove('filter-bar-hidden');
+      lastScrollY = currentScrollY;
+      isTicking = false;
+      return;
+    }
+
+    const navHeight = nav ? nav.offsetHeight : (window.innerWidth <= 768 ? 64 : 72);
+    
+    // Top threshold: where the filter bar meets the bottom of the navbar
+    const topThreshold = hero ? (hero.offsetTop + hero.offsetHeight - navHeight) : 80;
+
+    // 5. At the top of the page, always keep the category bar visible
+    if (currentScrollY <= topThreshold) {
+      filterBar.classList.remove('filter-bar-hidden');
+      lastScrollY = currentScrollY;
+      isTicking = false;
+      return;
+    }
+
+    // Ignore bounce triggers at the bottom of the page (rubber-banding on iOS/macOS)
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (currentScrollY >= maxScroll - 15) {
+      isTicking = false;
+      return;
+    }
+
+    // Don't hide while the user is actively typing in the search box
+    if (searchInput && document.activeElement === searchInput) {
+      isTicking = false;
+      return;
+    }
+
+    const diff = currentScrollY - lastScrollY;
+
+    if (Math.abs(diff) >= SCROLL_DELTA_THRESHOLD) {
+      if (diff > 0) {
+        // 3. User scrolls DOWN -> slide up & hide
+        filterBar.classList.add('filter-bar-hidden');
+      } else {
+        // 4. User scrolls UP even a small amount -> slide back into position & show
+        filterBar.classList.remove('filter-bar-hidden');
+      }
+      lastScrollY = currentScrollY;
+    }
+
+    isTicking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(updateBarState);
+      isTicking = true;
+    }
+  }, { passive: true });
 }
 
 initCatalogue();
